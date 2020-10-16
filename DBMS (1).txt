@@ -1,0 +1,105 @@
+CREATE TABLE movies.tab (
+
+mov_id INT NOT NULL,
+mov_title CHAR(45) NOT NULL,
+mov_rel_date_year DATE NOT NULL,
+mov_lang CHAR(45) NOT NULL,
+mov_country CHAR(45) NOT NULL,
+mov_duration INT NOT NULL,
+
+Constraint uq_mov_id Unique (mov_id)
+
+);
+INSERT INTO movies.tab(mov_id,mov_title,mov_rel_date_year ,mov_lang ,mov_country
+,mov_duration)
+VALUES(1,'Kirik Party','2018-06-15','Kannada','India','2');
+INSERT INTO movies.tab VALUES(2,'Parasite','2019-06-18','Korean','South Korea','3');
+INSERT INTO movies.tab VALUES(3,'Anabell','2008-07-14','English','America','2');
+INSERT INTO movies.tab VALUES(4,'Dil Bechara','2020-07-10','Hindi','India','2');
+INSERT INTO movies.tab VALUES(5,'Padmaavat','2017-03-12','Hindi','India','2');
+INSERT INTO movies.tab VALUES(6,'Penguin','2020-06-11','Tamil','India','2');
+INSERT INTO movies.tab VALUES(7,'Mahanati','2018-03-11','Tamil','India','2');
+
+---------------------------------------------------
+CREATE TABLE movies.cast (
+mov_id INT NOT NULL,
+act_id INT NOT NULL,
+act_fname VARCHAR(255) NOT NULL,
+act_lname VARCHAR(255) NOT NULL,
+act_gender CHAR(10) NOT NULL DEFAULT 'Male'
+primary key (mov_id,act_id)
+);
+INSERT INTO movies.cast(mov_id,act_id,act_fname,act_lname,act_gender)
+VALUES(1,3,'Rakshit','Shetty','Male');
+INSERT INTO movies.cast VALUES(1,4,'Rashmika','Mandanna','Female');
+INSERT INTO movies.cast VALUES(4,6,'Sushant','Rajput','Male');
+INSERT INTO movies.cast VALUES(5,1,'Deepika','Padukone','Female');
+INSERT INTO movies.cast VALUES(5,2,'Ranveer','Singh','Male');
+INSERT INTO movies.cast VALUES(5,5,'Shahid','Kapoor','Male');
+INSERT INTO movies.cast VALUES(6,7,'Keerthy','Suresh','Female');
+INSERT INTO movies.cast VALUES(7,7,'Keerthy','Suresh','Female');
+ALTER TABLE movies.cast ADD full_name VARCHAR(255) AS (concat(act_fname,' ',act_lname));
+-----------------------------------------------------------
+
+SELECT * FROM movies.actor;
+--------------------------------------------------------
+CREATE TABLE movies.award(
+Award_id INT NOT NULL PRIMARY KEY,
+mov_id INT NOT NULL,
+title VARCHAR(255) NOT NULL,
+FOREIGN KEY (mov_id) REFERENCES movies.tab(mov_id)
+);
+
+INSERT INTO movies.award(Award_id,mov_id,title)
+VALUES(1,2,'Oscar');
+INSERT INTO movies.award VALUES(2,5,'IIFA awards');
+INSERT INTO movies.award VALUES(3,7,'National Filmfare award');
+INSERT INTO movies.award VALUES(4,1,'Filmfare award');
+SELECT * FROM movies.award
+
+CREATE TABLE movies.rating(
+mov_id INT NOT NULL,
+num_o_stars INT NOT NULL'
+FOREIGN KEY(mov_id) REFERENCES movies.tab(mov_id)
+); 
+
+INSERT INTO movies.rating(mov_id,num_o_stars)
+VALUES(1,8);
+INSERT INTO movies.rating VALUES(2,9);
+INSERT INTO movies.rating VALUES(4,7);
+
+CREATE TABLE movies.gener(
+mov_id INT NOT NULL,
+gener_name VARCHAR(45) NOT NULL
+FOREIGN KEY(mov_id) REFERENCES movies.tab(mov_id)
+);
+
+INSERT INTO movies.gener(mov_id,gener_name)
+VALUES (1,'Drama');
+INSERT INTO movies.gener VALUES (2,'Drama');
+INSERT INTO movies.gener VALUES (3,'Horror');
+INSERT INTO movies.gener VALUES (4,'Rom-com');
+INSERT INTO movies.gener VALUES (5,'Historical');
+
+CREATE TABLE movie.director(
+mov_id INT NOT NULL,
+dir_fname VARCHAR(255) NOT NULL,
+dir_lname VARCHAR(255) NOT NULL
+FOREIGN KEY(mov_id) REFERENCES movies.tab(mov_id)
+);
+INSERT INTO movie.director(mov_id,dir_fname,dir_lname)
+VALUES (1,'Rishab','Shetty');
+INSERT INTO movie.director VALUES(2,'Bong','Joon-ho');
+INSERT INTO movie.director VALUES(5,'Sanjay','Bhansali');
+
+
+SELECT mov_id,mov_title,mov_country,Award.Award_title
+FROM movies.tab
+INNER JOIN Awards
+ON mov_id=movies.tab.mov_id
+
+SELECT mov_id,mov_title,mov_lang,movies_cast.act_fname,movies_cast.act_lname
+FROM movies.tab
+INNER JOIN movies.cast
+WHERE mov_id=movies.tab.mov_id
+
